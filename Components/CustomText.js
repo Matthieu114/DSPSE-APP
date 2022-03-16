@@ -12,19 +12,7 @@ export const CustomText = (props) => {
       fontSize: props?.fontSize != null ? props?.fontSize : 15,
       fontWeight: props?.fontWeight != null ? props?.fontWeight : 'normal',
       marginTop: 5
-    },
-
-    textActive: {
-      fontFamily: 'Arial',
-      color: colors.blue400,
-      fontSize: props?.fontSize != null ? props?.fontSize : 15,
-      fontWeight: props?.fontWeight != null ? props?.fontWeight : 'normal',
-      marginTop: 5
     }
   });
-  return (
-    <Text style={props.active ? styles.textActive : styles.text}>
-      {props.children}
-    </Text>
-  );
+  return <Text style={styles.text}>{props.children}</Text>;
 };

@@ -2,7 +2,7 @@ import {
   View,
   Text,
   SafeAreaView,
-  TouchableHighlight,
+  TouchableOpacity,
   TouchableWithoutFeedback,
   Image,
   StyleSheet,
@@ -17,9 +17,8 @@ import { auth } from '../firebase';
 import colors from '../config/colors';
 import MapView from 'react-native-maps';
 
-import IconButton from '../Components/IconButton';
 import { CustomText } from '../Components/CustomText';
-import FooterNavbar from '../Components/FooterTabNavigator';
+import { FontAwesome, FontAwesome5 } from '@expo/vector-icons';
 
 const Tab = createBottomTabNavigator();
 
@@ -39,7 +38,7 @@ export default function Homepage() {
     <View style={styles.parentContainer}>
       <SafeAreaView style={styles.informationBox}>
         <View style={styles.topRow}>
-          <IconButton
+          <FontAwesome5
             name='cog'
             size={25}
             color={colors.grey}
@@ -94,14 +93,13 @@ export default function Homepage() {
           // provider={MapView.PROVIDER_GOOGLE}
         />
       </View>
-
-      {/* <Tab.Navigator>
-        <Tab.Screen name='Homescreen' component={Homepage} />
-        <Tab.Screen name='Profile' component={Homepage} />
-        <Tab.Screen name='Weather' component={Homepage} />
-        <Tab.Screen name='Statistics' component={Homepage} />
-        <Tab.Screen name='Journal' component={Homepage} />
-      </Tab.Navigator> */}
+      <View style={styles.trackerContainer}>
+        <TouchableOpacity style={styles.trackerButton}>
+          <CustomText color={colors.white} fontSize={18} fontWeight={'500'}>
+            Start Tracking
+          </CustomText>
+        </TouchableOpacity>
+      </View>
     </View>
   );
 }
@@ -153,5 +151,27 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'space-around',
     backgroundColor: colors.white
+  },
+
+  trackerButton: {
+    display: 'flex',
+    alignItems: 'center',
+    backgroundColor: colors.primary,
+    marginTop: 30,
+    width: 350,
+    paddingVertical: 14,
+    borderRadius: 5,
+    shadowColor: colors.black,
+    shadowOffset: {
+      width: 0,
+      height: 3
+    },
+    shadowOpacity: 0.25,
+    shadowRadius: 5,
+    elevation: 4
+  },
+  trackerContainer: {
+    alignItems: 'center',
+    marginBottom: 20
   }
 });
