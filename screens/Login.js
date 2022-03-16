@@ -10,7 +10,7 @@ import {
   TextInput,
   Text
 } from 'react-native';
-import { CustomText } from '../config/CustomText';
+import { CustomText } from '../Components/CustomText';
 import { signInWithEmailAndPassword } from 'firebase/auth';
 import colors from '../config/colors';
 import { auth } from '../firebase';
@@ -61,7 +61,7 @@ const Login = () => {
       console.log(userCredentials.user);
     } catch (e) {
       console.log(e);
-      setError('Could not log in , something went wrong');
+      setError('Incorrect username or password');
     }
   };
 
@@ -118,6 +118,11 @@ const Login = () => {
               <Text style={{ fontWeight: '500' }}>Forgot Password?</Text>
             </TouchableOpacity>
           </View>
+
+          <View style={styles.errorMessageBox}>
+            {error ? <Text style={styles.errorMessage}>{error}</Text> : null}
+          </View>
+
           <TouchableOpacity
             style={styles.loginButton}
             onPress={() => handleLogin()}>
@@ -219,6 +224,14 @@ const styles = StyleSheet.create({
     width: 350,
     padding: 13,
     borderRadius: 5
+  },
+  errorMessageBox: {
+    position: 'relative'
+  },
+  errorMessage: {
+    color: 'red',
+    paddingTop: 20,
+    marginBottom: -20
   },
   loginButton: {
     display: 'flex',

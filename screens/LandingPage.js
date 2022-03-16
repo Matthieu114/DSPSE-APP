@@ -8,14 +8,14 @@ import {
   Image,
   TouchableOpacity
 } from 'react-native';
-import { CustomText } from '../config/CustomText';
+import { CustomText } from '../Components/CustomText';
 import colors from '../config/colors';
 
 const SCREEN_HEIGHT = Dimensions.get('screen').height;
 const SCREEN_WIDTH = Dimensions.get('screen').width;
 const LOGO_CONTAINER_HEIGHT = Dimensions.get('screen').height - 200;
 
-const Homepage = () => {
+const Landing = () => {
   const navigation = useNavigation();
   return (
     <View>
@@ -152,4 +152,4 @@ const styles = StyleSheet.create({
   }
 });
 
-export default Homepage;
+export default Landing;

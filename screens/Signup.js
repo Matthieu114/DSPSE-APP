@@ -11,7 +11,7 @@ import {
   TouchableWithoutFeedback,
   KeyboardAvoidingView
 } from 'react-native';
-import { CustomText } from '../config/CustomText';
+import { CustomText } from '../Components/CustomText';
 import colors from '../config/colors';
 import { auth } from '../firebase';
 import { createUserWithEmailAndPassword } from 'firebase/auth';
@@ -121,7 +121,7 @@ const Signup = () => {
           </View>
 
           <View>
-            {error ? <Text style={{ color: 'red' }}>{error}</Text> : null}
+            {error ? <Text style={styles.errorMessage}>{error}</Text> : null}
           </View>
 
           <TouchableOpacity
@@ -221,6 +221,11 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'center',
     alignItems: 'center'
+  },
+  errorMessage: {
+    color: 'red',
+    paddingTop: 10,
+    marginBottom: -10
   },
   linkContainer: {
     paddingHorizontal: 10

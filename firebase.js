@@ -2,6 +2,7 @@ import { initializeApp, getApps, getApp } from 'firebase/app';
 import { getAuth, initializeAuth } from 'firebase/auth';
 
 const firebaseConfig = {
+  //put in .env file when development finished
   apiKey: 'AIzaSyBKrSj5XUFr3KLtUrcreiZYFFireB0hyT0',
   authDomain: 'dspse-auth-development.firebaseapp.com',
   projectId: 'dspse-auth-development',
