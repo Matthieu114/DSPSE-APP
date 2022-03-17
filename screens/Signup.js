@@ -9,7 +9,9 @@ import {
   TouchableOpacity,
   TextInput,
   TouchableWithoutFeedback,
-  KeyboardAvoidingView
+  KeyboardAvoidingView,
+  SafeAreaView,
+  Keyboard
 } from 'react-native';
 import { CustomText } from '../Components/CustomText';
 import colors from '../config/colors';
@@ -22,7 +24,7 @@ const HERO_SECTION_HEIGHT = Dimensions.get('screen').height - 415;
 export const HeroSection = () => {
   const navigation = useNavigation();
   return (
-    <View style={styles.heroSection}>
+    <SafeAreaView style={styles.heroSection}>
       <View style={styles.logoContainer}>
         <TouchableWithoutFeedback
           onPress={() => {
@@ -40,7 +42,7 @@ export const HeroSection = () => {
           style={styles.globeLogo}
         />
       </View>
-    </View>
+    </SafeAreaView>
   );
 };
 
@@ -51,8 +53,11 @@ const Signup = () => {
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
   const [fullName, setFullName] = useState('');
-
   const navigation = useNavigation();
+
+  const ref_input2 = useRef();
+  const ref_input3 = useRef();
+  const ref_input4 = useRef();
 
   const toggleShowPassword = () => {
     setShowPassword(!showPassword);
@@ -73,79 +78,98 @@ const Signup = () => {
   };
 
   return (
-    <KeyboardAvoidingView behavior='padding'>
-      <View style={styles.box}>
-        <HeroSection />
+    <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
+      <KeyboardAvoidingView behavior='position'>
+        <View style={styles.box}>
+          <HeroSection />
 
-        <View style={styles.loginContainer} behavior='padding'>
-          <TextInput
-            style={styles.loginTextInput}
-            blurOnSubmit
-            placeholder='Full Name'
-            onChangeText={(text) => setFullName(text)}
-          />
-          <TextInput
-            style={styles.loginTextInput}
-            blurOnSubmit
-            placeholder='Email address'
-            onChangeText={(text) => setEmail(text)}
-          />
-          <View style={{ position: 'relative' }}>
+          <View style={styles.loginContainer}>
             <TextInput
               style={styles.loginTextInput}
               blurOnSubmit
-              placeholder='Password'
-              selectionColor={colors.grey}
-              secureTextEntry={showPassword}
-              onChangeText={(text) => setPassword(text)}
+              placeholder='Full Name'
+              onChangeText={(text) => setFullName(text)}
+              onSubmitEditing={() => {
+                ref_input2.current.focus();
+              }}
             />
-            <TouchableOpacity
-              style={{ position: 'absolute', right: 5, top: 25 }}
-              onPress={toggleShowPassword}>
-              <Text> Eye</Text>
-            </TouchableOpacity>
-          </View>
-          <View style={{ position: 'relative' }}>
             <TextInput
               style={styles.loginTextInput}
               blurOnSubmit
-              placeholder='Confirm Password'
-              selectionColor={colors.grey}
-              secureTextEntry={showPassword}
-              onChangeText={(text) => setConfirmPassword(text)}
+              placeholder='Email address'
+              onChangeText={(text) => setEmail(text)}
+              onSubmitEditing={() => {
+                ref_input3.current.focus();
+              }}
+              ref={ref_input2}
             />
+            <View style={{ position: 'relative' }}>
+              <TextInput
+                style={styles.loginTextInput}
+                blurOnSubmit
+                placeholder='Password'
+                selectionColor={colors.grey}
+                secureTextEntry={showPassword}
+                onChangeText={(text) => setPassword(text)}
+                onSubmitEditing={() => {
+                  ref_input4.current.focus();
+                }}
+                ref={ref_input3}
+              />
+              <TouchableOpacity
+                style={{ position: 'absolute', right: 5, top: 25 }}
+                onPress={toggleShowPassword}>
+                <Text> Eye</Text>
+              </TouchableOpacity>
+            </View>
+            <View style={{ position: 'relative' }}>
+              <TextInput
+                style={styles.loginTextInput}
+                blurOnSubmit
+                placeholder='Confirm Password'
+                selectionColor={colors.grey}
+                secureTextEntry={showPassword}
+                onChangeText={(text) => setConfirmPassword(text)}
+                ref={ref_input4}
+              />
+              <TouchableOpacity
+                style={{ position: 'absolute', right: 5, top: 25 }}
+                onPress={toggleShowPassword}>
+                <Text style={{ fontWeight: '500' }}>Eye</Text>
+              </TouchableOpacity>
+            </View>
+
+            <View>
+              {error ? <Text style={styles.errorMessage}>{error}</Text> : null}
+            </View>
+
             <TouchableOpacity
-              style={{ position: 'absolute', right: 5, top: 25 }}
-              onPress={toggleShowPassword}>
-              <Text style={{ fontWeight: '500' }}>Eye</Text>
+              style={styles.loginButton}
+              onPress={(e) => HandleSignup(e)}>
+              <CustomText color={colors.white} fontSize={18} fontWeight={'500'}>
+                Sign Up
+              </CustomText>
             </TouchableOpacity>
           </View>
 
-          <View>
-            {error ? <Text style={styles.errorMessage}>{error}</Text> : null}
+          <View style={styles.createAccountContainer}>
+            <CustomText color={colors.grey}>
+              Already have an account?
+            </CustomText>
+            <TouchableOpacity
+              style={styles.linkContainer}
+              onPress={() => navigation.navigate('Login')}>
+              <CustomText
+                color={colors.primary}
+                fontSize={15}
+                fontWeight={'500'}>
+                Log in
+              </CustomText>
+            </TouchableOpacity>
           </View>
-
-          <TouchableOpacity
-            style={styles.loginButton}
-            onPress={(e) => HandleSignup(e)}>
-            <CustomText color={colors.white} fontSize={18} fontWeight={'500'}>
-              Sign Up
-            </CustomText>
-          </TouchableOpacity>
         </View>
-
-        <View style={styles.createAccountContainer}>
-          <CustomText color={colors.grey}>Already have an account?</CustomText>
-          <TouchableOpacity
-            style={styles.linkContainer}
-            onPress={() => navigation.navigate('Login')}>
-            <CustomText color={colors.primary} fontSize={15} fontWeight={'500'}>
-              Log in
-            </CustomText>
-          </TouchableOpacity>
-        </View>
-      </View>
-    </KeyboardAvoidingView>
+      </KeyboardAvoidingView>
+    </TouchableWithoutFeedback>
   );
 };
 
@@ -157,27 +181,19 @@ const styles = StyleSheet.create({
   heroSection: {
     position: 'relative',
     width: SCREEN_WIDTH,
-    height: HERO_SECTION_HEIGHT,
     backgroundColor: colors.primaryPalette[100]
   },
   undrawLogoContainer: {
-    position: 'absolute',
+    alignItems: 'center',
     zIndex: 100,
-    left: SCREEN_WIDTH / 2,
-    transform: [{ translateX: '-150%' }],
-    top: 200
+    marginTop: 50
   },
   globeLogo: {
     width: 290,
     height: 207
   },
-
   logoContainer: {
-    position: 'absolute',
-    zIndex: 100,
-    left: SCREEN_WIDTH / 2,
-    transform: [{ translateX: '-50%' }],
-    top: 40
+    alignItems: 'center'
   },
   logo: {
     height: 84,
@@ -185,8 +201,6 @@ const styles = StyleSheet.create({
   },
   loginContainer: {
     marginTop: 5,
-    display: 'flex',
-    justifyContent: 'center',
     alignItems: 'center'
   },
   loginTextInput: {
