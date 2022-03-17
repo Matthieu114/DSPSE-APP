@@ -10,12 +10,13 @@ export default {
   grey: '#767676',
   lightGrey: '#979797',
 
-  secondayPalette: {
+  palette: {
     100: '#28B2FF',
     200: '#00CBFD',
     300: '#00E0E3',
     400: '#34EFB8',
-    500: '#A4F78C'
+    500: '#A4F78C',
+    600: '#FF6584'
   },
 
   primaryPalette: {

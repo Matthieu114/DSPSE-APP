@@ -39,7 +39,7 @@ export default function TabNavigator() {
         }}
       />
       <Tab.Screen
-        name='Home'
+        name='Homepage'
         component={Homepage}
         options={{
           tabBarIcon: ({ color, size }) => (

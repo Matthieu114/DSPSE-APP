@@ -8,8 +8,7 @@ import {
   StyleSheet,
   Dimensions
 } from 'react-native';
-import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
-import React, { useContext, useState } from 'react';
+import React, { useContext, useState, useEffect } from 'react';
 import { AuthenticatedUserContext } from '../navigation/AuthenticatedUserProvider';
 import { useNavigation } from '@react-navigation/native';
 import { signOut } from 'firebase/auth';
@@ -20,12 +19,13 @@ import MapView from 'react-native-maps';
 import { CustomText } from '../Components/CustomText';
 import { FontAwesome, FontAwesome5 } from '@expo/vector-icons';
 
-const Tab = createBottomTabNavigator();
-
 export default function Homepage() {
   const navigation = useNavigation();
   const { user, setUser } = useContext(AuthenticatedUserContext);
-  const [activePage, setActivePage] = useState(false);
+  const [time, setTime] = useState(0);
+  const [timerOn, setTimerOn] = useState(false);
+  const [activeTimer, setActiveTimer] = useState(false);
+  const [paused, setPause] = useState(paused);
 
   const handleSignout = async () => {
     try {
@@ -34,6 +34,20 @@ export default function Homepage() {
       console.log(e);
     }
   };
+
+  useEffect(() => {
+    let interval = null;
+    if (timerOn) {
+      interval = setInterval(() => {
+        setTime((prevTime) => prevTime + 10);
+      }, 10);
+    } else {
+      clearInterval(interval);
+    }
+
+    return () => clearInterval(interval);
+  }, [timerOn]);
+
   return (
     <View style={styles.parentContainer}>
       <SafeAreaView style={styles.informationBox}>
@@ -53,8 +67,13 @@ export default function Homepage() {
           <Text>Logo 3</Text>
         </View>
         <View style={styles.timer}>
-          <CustomText color={colors.blue400} fontSize={50} fontWeight={'500'}>
-            00:24:42
+          <CustomText
+            color={colors.palette[100]}
+            fontSize={50}
+            fontWeight={'500'}>
+            {('0' + Math.floor((time / 60000) % 60)).slice(-2)}:
+            {('0' + Math.floor((time / 1000) % 60)).slice(-2)}:
+            {('0' + ((time / 10) % 100)).slice(-2)}
           </CustomText>
           <CustomText color={colors.grey}>Duration</CustomText>
         </View>
@@ -87,18 +106,80 @@ export default function Homepage() {
         </View>
       </SafeAreaView>
 
+      {/* Goole Maps Container */}
+
       <View style={styles.mapContainer}>
         <MapView
           style={styles.map}
-          // provider={MapView.PROVIDER_GOOGLE}
+          showsUserLocation
+          provider={MapView.PROVIDER_GOOGLE}
         />
       </View>
+
+      {/* Pause Resume Reset Button conditionals */}
+
       <View style={styles.trackerContainer}>
-        <TouchableOpacity style={styles.trackerButton}>
-          <CustomText color={colors.white} fontSize={18} fontWeight={'500'}>
-            Start Tracking
-          </CustomText>
-        </TouchableOpacity>
+        {!activeTimer ? (
+          <TouchableOpacity
+            style={styles.trackerButton}
+            onPress={() => {
+              setTimerOn(true);
+              setActiveTimer(true);
+            }}>
+            <CustomText color={colors.white} fontSize={18} fontWeight={'500'}>
+              Start Tracking
+            </CustomText>
+          </TouchableOpacity>
+        ) : (
+          <View style={styles.resetPauseButtonContainer}>
+            {!paused ? (
+              <TouchableOpacity
+                style={[
+                  styles.trackerButton,
+                  activeTimer && styles.pauseButton
+                ]}
+                onPress={() => {
+                  setTimerOn(false);
+                  setPause(true);
+                }}>
+                <CustomText
+                  color={colors.white}
+                  fontSize={18}
+                  fontWeight={'500'}>
+                  Pause
+                </CustomText>
+              </TouchableOpacity>
+            ) : (
+              <TouchableOpacity
+                style={[
+                  styles.trackerButton,
+                  activeTimer && styles.pauseButton
+                ]}
+                onPress={() => {
+                  setTimerOn(true);
+                  setPause(false);
+                }}>
+                <CustomText
+                  color={colors.white}
+                  fontSize={18}
+                  fontWeight={'500'}>
+                  Resume
+                </CustomText>
+              </TouchableOpacity>
+            )}
+            <TouchableOpacity
+              style={[styles.trackerButton, activeTimer && styles.resetButton]}
+              onPress={() => {
+                setTime(0);
+                setActiveTimer(false);
+                setTimerOn(false);
+              }}>
+              <CustomText color={colors.white} fontSize={18} fontWeight={'500'}>
+                Reset
+              </CustomText>
+            </TouchableOpacity>
+          </View>
+        )}
       </View>
     </View>
   );
@@ -156,7 +237,7 @@ const styles = StyleSheet.create({
   trackerButton: {
     display: 'flex',
     alignItems: 'center',
-    backgroundColor: colors.primary,
+    backgroundColor: colors.palette[100],
     marginTop: 30,
     width: 350,
     paddingVertical: 14,
@@ -170,8 +251,23 @@ const styles = StyleSheet.create({
     shadowRadius: 5,
     elevation: 4
   },
+
+  pauseButton: {
+    width: 170,
+    marginRight: 5
+  },
+  resetButton: {
+    width: 170,
+    backgroundColor: colors.palette[300],
+    marginLeft: 5
+  },
   trackerContainer: {
     alignItems: 'center',
     marginBottom: 20
+  },
+
+  resetPauseButtonContainer: {
+    display: 'flex',
+    flexDirection: 'row'
   }
 });

@@ -67,7 +67,8 @@ const Signup = () => {
       );
     } catch (e) {
       console.log(e);
-      setError('something went wrong , try again! ');
+      // setError('something went wrong , try again! ');
+      setError(e.message);
     }
   };
 
