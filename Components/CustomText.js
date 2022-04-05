@@ -10,8 +10,7 @@ export const CustomText = (props) => {
       fontFamily: 'Arial',
       color: props?.color != null ? props?.color : 'black',
       fontSize: props?.fontSize != null ? props?.fontSize : 15,
-      fontWeight: props?.fontWeight != null ? props?.fontWeight : 'normal',
-      marginTop: 5
+      fontWeight: props?.fontWeight != null ? props?.fontWeight : 'normal'
     }
   });
   return <Text style={styles.text}>{props.children}</Text>;

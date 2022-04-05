@@ -1,0 +1,11 @@
+{
+  "considerIp": "true",
+  "carrier": "Bouygues Telecom 49.0",
+  "wifiAccessPoints": [
+    {
+      "macAddress": "A0:FB:C5:B9:F5:6A",
+      "signalStrength": -54,
+      "signalToNoiseRatio": 0
+    }
+  ]
+}

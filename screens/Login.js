@@ -128,11 +128,9 @@ const Login = () => {
                 <Text style={{ fontWeight: '500' }}>Forgot Password?</Text>
               </TouchableOpacity>
             </View>
-
             <View style={styles.errorMessageBox}>
               {error ? <Text style={styles.errorMessage}>{error}</Text> : null}
             </View>
-
             <TouchableOpacity
               style={styles.loginButton}
               onPress={() => handleLogin()}>

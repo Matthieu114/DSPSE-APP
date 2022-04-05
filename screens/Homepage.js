@@ -11,8 +11,6 @@ import {
 import React, { useContext, useState, useEffect } from 'react';
 import { AuthenticatedUserContext } from '../navigation/AuthenticatedUserProvider';
 import { useNavigation } from '@react-navigation/native';
-import { signOut } from 'firebase/auth';
-import { auth } from '../firebase';
 import colors from '../config/colors';
 import MapView from 'react-native-maps';
 
@@ -26,14 +24,6 @@ export default function Homepage() {
   const [timerOn, setTimerOn] = useState(false);
   const [activeTimer, setActiveTimer] = useState(false);
   const [paused, setPause] = useState(paused);
-
-  const handleSignout = async () => {
-    try {
-      await signOut(auth);
-    } catch (e) {
-      console.log(e);
-    }
-  };
 
   useEffect(() => {
     let interval = null;
