@@ -56,6 +56,7 @@ const Login = () => {
   const [password, setPassword] = useState('');
   const [modalVisible, setModalVisible] = useState(false);
   const [resetPasswordMessage, setResetPasswordMessage] = useState('');
+  const [errorMessage, setErrorMessage] = useState('');
 
   const navigation = useNavigation();
 
@@ -90,7 +91,7 @@ const Login = () => {
         'A password request has been sent to your email!'
       );
     } catch (e) {
-      console.log(e);
+      setErrorMessage(e.message);
     }
   };
 
@@ -182,7 +183,6 @@ const Login = () => {
                   clearTextOnFocus
                   placeholder='Email'
                   selectionColor={colors.grey}
-                  secureTextEntry={true}
                   onChangeText={(text) => setEmail(text)}
                 />
                 <TouchableOpacity
@@ -191,6 +191,7 @@ const Login = () => {
                   <Text style={styles.textStyle}>Send reset email</Text>
                 </TouchableOpacity>
                 <Text style={{ color: 'red' }}>{resetPasswordMessage}</Text>
+                <Text style={{ color: 'red' }}>{errorMessage}</Text>
               </View>
             </View>
           </Modal>
