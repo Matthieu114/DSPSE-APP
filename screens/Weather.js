@@ -36,7 +36,8 @@ const ForecastWidget = ({
   let newTime;
 
   if (time.slice(11).charAt(0) === '0') newTime = time.slice(12);
-  else newTime = time.slice(10);
+  else newTime = time.slice(11);
+
   return (
     <LinearGradient
       colors={[colors.blue400, colors.blue200, colors.blue400]}
@@ -56,13 +57,13 @@ const ForecastWidget = ({
           {newTime}
         </CustomText>
       </View>
+      <Image
+        style={{ width: 40, height: 40, paddingRight: 10 }}
+        source={{
+          uri: 'https:' + image
+        }}
+      />
       <View style={{ flexDirection: 'row', alignItems: 'center' }}>
-        <Image
-          style={{ width: 30, height: 30 }}
-          source={{
-            uri: 'https:' + image
-          }}
-        />
         <CustomText color='white' fontWeight='500'>
           {chanceOfRain}% rain
         </CustomText>
@@ -86,7 +87,6 @@ const Weather = () => {
   const [forecast, setForecast] = useState([]);
 
   useEffect(async () => {
-    console.log('Try fetching weather');
     const WEATHER_URL = `http://api.weatherapi.com/v1/current.json?key=${API_KEY}&q=auto:ip&aqi=yes`;
     const FORECAST_URL = `http://api.weatherapi.com/v1/forecast.json?key=${API_KEY}&q=auto:ip&aqi=yes&days=1`;
     const weatherResponse = await axios.get(WEATHER_URL);
@@ -135,7 +135,11 @@ const Weather = () => {
       style={styles.primaryBackground}
       colors={[colors.primaryTransparent20p, colors.blue400, colors.blue200]}>
       <LinearGradient
-        colors={[colors.lightGreyT, colors.greyT, colors.lightGreyT]}
+        colors={[
+          colors.lightGreyTransparent,
+          colors.greyTransparent,
+          colors.lightGreyTransparent
+        ]}
         style={styles.primaryInfoBox}>
         {/* top row info */}
         <View style={styles.topRowInfo}>
@@ -165,7 +169,7 @@ const Weather = () => {
               {currentWeather.temperatureCel}
               <Text style={{ fontWeight: '200', fontSize: 40 }}>°</Text>
             </CustomText>
-            <CustomText color='white' fontWeight='400'>
+            <CustomText color='white' fontWeight='400' fontSize={25}>
               {currentWeather.condition}
             </CustomText>
           </View>
@@ -235,7 +239,7 @@ const Weather = () => {
         </View>
       </LinearGradient>
 
-      <View style={{ marginTop: 25, paddingLeft: 5, paddingRight: 10 }}>
+      <View style={{ marginTop: 25, paddingLeft: 15, paddingRight: 10 }}>
         <View style={{ alignItems: 'left' }}>
           <CustomText color='white' fontWeight='400' fontSize={25}>
             {format(new Date(), 'eeee')}{' '}

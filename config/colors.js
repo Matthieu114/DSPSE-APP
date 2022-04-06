@@ -4,13 +4,14 @@ export default {
   primaryTransparent25p: '#CAECFF',
   blue200: '#3EB9FF',
   blue300: '#0D79C1',
-  blue400: '0099FF#',
+  blue400: '#0099FF',
   black: '#000000',
   white: '#FFFFFF',
   grey: '#767676',
   lightGrey: '#979797',
-  greyT: 'rgba(62, 185, 255, 0.9)',
-  lightGreyT: 'rgba(0, 153, 255, 0.6)',
+  lightestGrey: '#e6e6e6',
+  greyTransparent: 'rgba(62, 185, 255, 0.9)',
+  lightGreyTransparent: 'rgba(0, 153, 255, 0.6)',
 
   palette: {
     100: '#28B2FF',

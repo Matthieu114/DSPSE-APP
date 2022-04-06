@@ -11,12 +11,15 @@ import {
   TextInput,
   Text,
   SafeAreaView,
-  KeyboardAvoidingView
+  KeyboardAvoidingView,
+  Modal
 } from 'react-native';
 import { CustomText } from '../Components/CustomText';
 import { signInWithEmailAndPassword } from 'firebase/auth';
 import colors from '../config/colors';
 import { auth } from '../firebase';
+import { AntDesign } from '@expo/vector-icons';
+import { sendPasswordResetEmail } from 'firebase/auth';
 
 const SCREEN_WIDTH = Dimensions.get('screen').width;
 const HERO_SECTION_HEIGHT = Dimensions.get('screen').height - 415;
@@ -51,6 +54,8 @@ const Login = () => {
   const [error, setError] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const [modalVisible, setModalVisible] = useState(false);
+  const [resetPasswordMessage, setResetPasswordMessage] = useState('');
 
   const navigation = useNavigation();
 
@@ -67,6 +72,25 @@ const Login = () => {
     } catch (e) {
       console.log(e);
       setError('Incorrect username or password');
+    }
+  };
+
+  const showPasswordModal = () => {
+    setModalVisible(true);
+  };
+
+  const hidePasswordModal = () => {
+    setModalVisible(false);
+  };
+
+  const resetPassword = async () => {
+    try {
+      await sendPasswordResetEmail(auth, email);
+      setResetPasswordMessage(
+        'A password request has been sent to your email!'
+      );
+    } catch (e) {
+      console.log(e);
     }
   };
 
@@ -124,7 +148,8 @@ const Login = () => {
                 ref={nextInput2}
               />
               <TouchableOpacity
-                style={{ position: 'absolute', right: 5, top: 25 }}>
+                style={{ position: 'absolute', right: 5, top: 25 }}
+                onPress={showPasswordModal}>
                 <Text style={{ fontWeight: '500' }}>Forgot Password?</Text>
               </TouchableOpacity>
             </View>
@@ -139,6 +164,36 @@ const Login = () => {
               </CustomText>
             </TouchableOpacity>
           </View>
+
+          <Modal animationType='slide' visible={modalVisible}>
+            <View style={styles.centeredView}>
+              <View style={styles.modalView}>
+                <AntDesign
+                  name='close'
+                  size={24}
+                  color='black'
+                  style={{ position: 'absolute', right: 30, top: 30 }}
+                  onPress={hidePasswordModal}
+                />
+                <Text style={styles.modalText}>Reset your password</Text>
+                <TextInput
+                  style={styles.loginTextInput}
+                  blurOnSubmit
+                  clearTextOnFocus
+                  placeholder='Email'
+                  selectionColor={colors.grey}
+                  secureTextEntry={true}
+                  onChangeText={(text) => setEmail(text)}
+                />
+                <TouchableOpacity
+                  style={[styles.button, styles.buttonClose]}
+                  onPress={resetPassword}>
+                  <Text style={styles.textStyle}>Send reset email</Text>
+                </TouchableOpacity>
+                <Text style={{ color: 'red' }}>{resetPasswordMessage}</Text>
+              </View>
+            </View>
+          </Modal>
 
           <View style={styles.createAccountContainer}>
             <CustomText color={colors.grey}>Not a member?</CustomText>
@@ -264,6 +319,49 @@ const styles = StyleSheet.create({
   },
   linkContainer: {
     paddingHorizontal: 10
+  },
+  centeredView: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    marginTop: 22
+  },
+  modalView: {
+    margin: 20,
+    backgroundColor: 'white',
+    borderRadius: 20,
+    padding: 35,
+    alignItems: 'center',
+    shadowColor: '#000',
+    shadowOffset: {
+      width: 0,
+      height: 2
+    },
+    shadowOpacity: 0.25,
+    shadowRadius: 4,
+    elevation: 5
+  },
+  button: {
+    borderRadius: 5,
+    padding: 10,
+    elevation: 2
+  },
+  buttonOpen: {
+    backgroundColor: '#F194FF'
+  },
+  buttonClose: {
+    backgroundColor: '#2196F3',
+    marginTop: 10,
+    width: 350
+  },
+  textStyle: {
+    color: 'white',
+    fontWeight: 'bold',
+    textAlign: 'center'
+  },
+  modalText: {
+    marginBottom: 15,
+    textAlign: 'center'
   }
 });
 

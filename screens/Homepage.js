@@ -24,6 +24,7 @@ export default function Homepage() {
   const [timerOn, setTimerOn] = useState(false);
   const [activeTimer, setActiveTimer] = useState(false);
   const [paused, setPause] = useState(paused);
+  const [satellite, setSatellite] = useState(false);
 
   useEffect(() => {
     let interval = null;
@@ -37,6 +38,10 @@ export default function Homepage() {
 
     return () => clearInterval(interval);
   }, [timerOn]);
+
+  const toggleSatelliteView = () => {
+    setSatellite(!satellite);
+  };
 
   return (
     <View style={styles.parentContainer}>
@@ -54,7 +59,21 @@ export default function Homepage() {
               style={styles.logo}
             />
           </TouchableWithoutFeedback>
-          <Text>Logo 3</Text>
+          {satellite ? (
+            <FontAwesome5
+              name='satellite-dish'
+              size={24}
+              color={colors.blue200}
+              onPress={toggleSatelliteView}
+            />
+          ) : (
+            <FontAwesome5
+              name='satellite-dish'
+              size={24}
+              color={colors.lightGrey}
+              onPress={toggleSatelliteView}
+            />
+          )}
         </View>
         <View style={styles.timer}>
           <CustomText
@@ -99,11 +118,20 @@ export default function Homepage() {
       {/* Goole Maps Container */}
 
       <View style={styles.mapContainer}>
-        <MapView
-          style={styles.map}
-          showsUserLocation
-          provider={MapView.PROVIDER_GOOGLE}
-        />
+        {satellite ? (
+          <MapView
+            style={styles.map}
+            showsUserLocation
+            provider={MapView.PROVIDER_GOOGLE}
+            mapType='satellite'
+          />
+        ) : (
+          <MapView
+            style={styles.map}
+            showsUserLocation
+            provider={MapView.PROVIDER_GOOGLE}
+          />
+        )}
       </View>
 
       {/* Pause Resume Reset Button conditionals */}
