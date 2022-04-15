@@ -23,7 +23,6 @@ import { CustomText } from '../Components/CustomText';
 import { format } from 'date-fns';
 
 const API_KEY = 'c056d8aba4ab4de6b5692009220404';
-const GOOGLE_MAPS_API_KEY = 'AIzaSyCPNEln7cCQP-_BXyVx7tF7-N9OFV9DuNQ';
 
 const ForecastWidget = ({
   image,
